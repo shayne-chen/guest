@@ -2,7 +2,7 @@ from django.http import JsonResponse
 from sign.models import Event, Guest
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.db.utils import IntegrityError
-import time
+import time, datetime, pytz
 
 
 #添加发布会接口
@@ -43,7 +43,19 @@ def get_event_list(request):
 	name = request.GET.get("name", "")
 
 	if event_id == '' and name == '':
-		return JsonResponse({"status":10021, "message":"parameter error"})
+		#return JsonResponse({"status":10021, "message":"parameter error"})
+		result = Event.objects.all()
+		datas = []
+		for r in result:
+			event = {}
+			event['event_id'] = r.id
+			event['name'] = r.name
+			event['limit'] = r.limit
+			event['status'] = r.status
+			event['address'] = r.address
+			event['start_time'] = r.start_time
+			datas.append(event)
+		return JsonResponse({"status":10021, "message":"success", "data":datas})
 
 	if event_id != '':
 		event = {}
@@ -101,16 +113,11 @@ def add_guest(request):
 		return	JsonResponse({"status":10024, "message":"event number is full"})
 
 	event_time = Event.objects.get(id=event_id).start_time
-	etime = str(event_time).split('.')[0]
-	timeArray = time.strptime(etime, "%Y-%m-%d %H:%M:%S")
-	e_time = int(time.mktime(timeArray))
+	now = datetime.datetime.now()
+	now_time = now.replace(tzinfo=pytz.timezone('UTC'))
 
-	now_time = str(time.time())
-	ntime = now_time.split(".")[0]
-	n_time = int(ntime)
-
-	if n_time >= e_time:
-		return JsonResponse({"status":10025, "message":"event has started"})
+	if event_time < now_time:
+	 	return JsonResponse({"status":10025, "message":"event has started"})
 	try:
 		Guest.objects.create(realname=realname, phone=int(phone), email=email, sign=0, event_id=int(event_id))
 	except IntegrityError:
@@ -144,7 +151,7 @@ def get_guest_list(request):
 			return JsonResponse({"status":10022, "message":"query result is empty"})
 
 	if event_id != "" and phone != "":
-		guest = []
+		guest = {}
 		try:
 			result = Guest.objects.get(phone=phone, event_id=event_id)
 		except ObjectDoesNotExist:
@@ -175,26 +182,21 @@ def user_sign(request):
 		return JsonResponse({"status":10023, "message":"event status is not available"})
 
 	event_time = Event.objects.get(id=event_id).start_time
-	etime = str(event_time).split('.')[0]
-	timeArray = time.strptime(etime, "%Y-%m-%d %H:%M:%S")
-	e_time = int(time.mktime(timeArray))
+	now = datetime.datetime.now()
+	now_time = now.replace(tzinfo=pytz.timezone('UTC'))
 
-	now_time = str(time.time())
-	ntime = now_time.split('.')[0]
-	n_time = int(ntime)
-
-	if n_time >= e_time:
-		return JsonResponse({"status":10024, "message":"event has started"})
+	if event_time < now_time:
+	 	return JsonResponse({"status":10024, "message":"event has started"})
 
 	result = Guest.objects.filter(phone=phone)
 	if not result:
 		return JsonResponse({"status":10025, "message":"user phone null"})
 
-	result = Guest.objects.filter(event_id=event_id, phone=phone)
+	result = Guest.objects.get(event_id=event_id, phone=phone)
 	if not result:
 		return JsonResponse({"status":10026, "message":"user did not participate in the conference"})
-
-	if result:
+	
+	if result.sign:
 		return JsonResponse({"status":10027, "message":"user has sign in"})
 	else:
 		Guest.objects.filter(event_id=event_id, phone=phone).update(sign='1')

@@ -1,0 +1,49 @@
+import requests
+
+def test_get_event_list(event_id, name):
+	url = "http://127.0.0.1:8000/api/get_event_list/"
+	params = 'event_id=%s&name=%s'%(event_id, name)
+	interface_url = url + "/?" + params
+	result = requests.get(interface_url)
+	print (result.text)
+
+
+def test_add_event():
+	url = "http://127.0.0.1:8000/api/add_event/"
+	params = {"event_id":"4", "name":"iPhone 20", "limit":"100", "address":"Beijing", "start_time":"2018-09-10 12:00:00"}
+	result = requests.post(url, data=params)
+	print (result.text)
+
+
+def test_get_guest_list(event_id, phone):
+	url = "http://127.0.0.1:8000/api/get_guest_list/"
+	params = "event_id=%s&phone=%s"%(event_id, phone)
+	interface_url = url + "/?" + params
+	result = requests.get(interface_url)
+	print (result.text)
+
+
+def test_add_guest():
+	url = "http://127.0.0.1:8000/api/add_guest/"
+	params = {"event_id":"1", "realname":"chen", "phone":"18310610899", "email":"chen@163.com"}
+	result = requests.post(url, data=params)
+	print (result.text)
+
+
+
+def test_user_sign(event_id, phone):
+	url  = "http://127.0.0.1:8000/api/user_sign/"
+	params = {"event_id":event_id, "phone":phone}
+	result = requests.post(url, data=params)
+	print (result.text)
+
+
+
+if __name__ == '__main__':
+	#test_get_event_list("1", "")
+	#test_get_guest_list("3", "")
+	#test_add_event()
+	#test_add_guest()
+	#test_user_sign("1", "18310610895")
+
+
