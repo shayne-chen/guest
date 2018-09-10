@@ -164,6 +164,53 @@ def get_guest_list(request):
 			return JsonResponse({"status":200, "message":"success", "data":guest})
 
 
+#修改嘉賓信息
+def change_guest(request):
+	event_id = request.POST.get("event_id", "")
+	realname = request.POST.get("realname", "")
+	phone = request.POST.get("phone", "")
+	email = request.POST.get("email", "")
+
+	if event_id == "" or realname == "" or phone == "" or email == "":
+		return JsonResponse({"status":10021, "message":"parameter error"})
+	
+	result = Event.objects.filter(id=event_id)
+	if not result:
+		return JsonResponse({"status":10022, "message":"event_id null"})
+
+	try:
+		result = Guest.objects.get(phone=phone, event_id=event_id)
+	except ObjectDoesNotExist:
+		return JsonResponse({"status":10023, "message":"guest is not exists"})
+	else:
+		Guest.objects.filter(event_id=event_id, phone=phone).update(realname=realname, phone=phone, email=email, sign="1")
+		return JsonResponse({"status":10024, "message":"change guest info success"})
+
+
+
+#刪除嘉賓
+def delete_guest(request):
+	event_id = request.POST.get("event_id", "")
+	phone = request.POST.get("phone", "")
+	realname = request.POST.get("realname", "")
+
+	if event_id == "" or phone == "" or realname == "":
+		return JsonResponse({"status":10021, "message":"parameter error"})
+
+	result = Event.objects.get(id=event_id)
+	if not result:
+		return JsonResponse({"status":10022, "message":"event_id null"})
+
+	try:
+		result = Guest.objects.get(event_id=event_id, phone=phone, realname=realname)
+	except ObjectDoesNotExist:
+		return JsonResponse({"status":10023, "message":"guest not exists"})
+	else:
+		result.delete()
+		return JsonResponse({"status":10024, "message":"delete success"})
+
+
+
 
 #嘉宾签到接口
 def user_sign(request):
