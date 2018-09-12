@@ -97,14 +97,4 @@ def logout(request):
 	auth.logout(request)
 	response = HttpResponseRedirect('/index/')
 	return response
-
-
-
-
-
-
-
-
-
-
-
+	

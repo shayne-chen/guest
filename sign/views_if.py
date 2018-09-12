@@ -88,6 +88,25 @@ def get_event_list(request):
 			return JsonResponse({"status":10022, "message":"query result is empty"})
 
 
+
+#删除发布会
+def delete_event(request):
+	event_id = request.POST.get("event_id", "")
+	name = request.POST.get("name", "")
+
+	if event_id == "" or name == "":
+		return JsonResponse({"status":10021, "message":"parameter error"})
+
+	try:
+		result = Event.objects.get(id=event_id, name=name)
+	except ObjectDoesNotExist:
+		return JsonResponse({"status":10022, "message":"event is not exists"})
+	else:
+		result.delete()
+		return JsonResponse({"status":10023, "message":"delete event success"})
+
+
+
 #添加嘉宾接口
 def add_guest(request):
 	event_id = request.POST.get('event_id', '')

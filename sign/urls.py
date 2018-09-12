@@ -16,6 +16,8 @@ urlpatterns = [
 	url(r'^change_guest/', views_if.change_guest, name='change_guest'),
 	#ex : /api/delete_guest
 	url(r'^delete_guest/', views_if.delete_guest, name='delete_guest'),
+	#ex : /api/delete_event
+	url(r'^delete_event/', views_if.delete_event, name='delete_event'),
 	#ex : /api/user_sign
 	url(r'^user_sign/', views_if.user_sign, name='user_sign'),
 ]
