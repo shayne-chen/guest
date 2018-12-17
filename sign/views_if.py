@@ -271,4 +271,5 @@ def user_sign(request):
 
 def jenkins_test(request):
 	print ("this is a jenkins test!")
+	print ("test2.0")
 	return 0
