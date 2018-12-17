@@ -3,17 +3,20 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                echo 'Building..'
+                sudo echo 'Building..'>>/home/mobvoi/result
+		sudo sh /home/mobvoi/jenkins.sh
             }
         }
         stage('Test') {
             steps {
-                echo 'Testing..'
+		sudo echo 'Testing..'>>/home/mobvoi/result
+                sudo sh /home/mobvoi/jenkins.sh
             }
         }
         stage('Deploy') {
             steps {
-                echo 'Deploying....'
+                sudo echo 'Deploying....'>>/home/mobvoi/result
+		sudo sh /home/mobvoi/jenkins.sh
             }
         }
     }
