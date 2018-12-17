@@ -269,3 +269,6 @@ def user_sign(request):
 		return JsonResponse({"status":200, "message":"sign success"})
 
 
+def jenkins_test(request):
+	print ("this is a jenkins test!")
+	return 0
