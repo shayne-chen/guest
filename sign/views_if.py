@@ -270,10 +270,5 @@ def user_sign(request):
 
 
 def jenkins_test(request):
-	print ("this is a jenkins test!")
-	print ("test2.0")
-	print ("test3.0")
-	print ("test4.0")
-	print ("test5.0")
-	print ("test2018-12-18-01")
+	print ("docker jenkins test 1.0")
 	return 0
