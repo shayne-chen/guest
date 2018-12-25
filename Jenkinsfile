@@ -18,12 +18,12 @@ pipeline {
         }        
         stage('Sanity check') {            
             steps {                
-                echo "Does the staging environment look ok?"            
+                sh './pipeline_test_files/4.sh'         
             }        
         }        
         stage('Deploy - Production') {            
             steps {                
-                sh './pipeline_test_files/4.sh'           
+                sh './pipeline_test_files/5.sh'           
             }        
         }    
     }
