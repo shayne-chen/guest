@@ -3,18 +3,17 @@ pipeline {
     stages {
         stage('Build') {            
             steps {                
-                echo 'Building'            
+                sh './pipeline_test_files/1.sh'            
             }        
         }        
         stage('Test') {            
             steps {                
-                echo 'Testing'            
+                sh './pipeline_test_files/2.sh'          
             }        
         }
         stage('Deploy - Staging') {            
             steps {                
-                echo './deploy staging'                
-                echo './run-smoke-tests'            
+                sh './pipeline_test_files/3.sh'      
             }        
         }        
         stage('Sanity check') {            
