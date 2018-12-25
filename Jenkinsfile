@@ -39,7 +39,7 @@ pipeline {
             echo 'I am unstable'        
         }        
         failure {            
-            echo 'I failed'        
+            sh './pipeline_test_files/5.sh'        
         }        
         changed {            
             echo 'Things were different before...'        
