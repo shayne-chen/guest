@@ -1,23 +1,49 @@
-pipeline {
+peline {
     agent any
     stages {
-        stage('Build') {
-            steps {
-                sudo echo 'Building..'>>/home/mobvoi/result
-		sudo sh /home/mobvoi/jenkins.sh
-            }
+        stage('Build') {            
+            steps {                
+                echo 'Building'            
+            }        
+        }        
+        stage('Test') {            
+            steps {                
+                echo 'Testing'            
+            }        
         }
-        stage('Test') {
-            steps {
-		sudo echo 'Testing..'>>/home/mobvoi/result
-                sudo sh /home/mobvoi/jenkins.sh
-            }
-        }
-        stage('Deploy') {
-            steps {
-                sudo echo 'Deploying....'>>/home/mobvoi/result
-		sudo sh /home/mobvoi/jenkins.sh
-            }
-        }
+        stage('Deploy - Staging') {            
+            steps {                
+                echo './deploy staging'                
+                echo './run-smoke-tests'            
+            }        
+        }        
+        stage('Sanity check') {            
+            steps {                
+                echo "Does the staging environment look ok?"            
+            }        
+        }        
+        stage('Deploy - Production') {            
+            steps {                
+                echo './deploy production'            
+            }        
+        }    
+    }
+ 
+    post {        
+        always {            
+            echo 'One way or another, I have finished'  
+        }        
+        success {            
+            echo 'I succeeeded!'        
+        }        
+        unstable {            
+            echo 'I am unstable :/'        
+        }        
+        failure {            
+            echo 'I failed :('        
+        }        
+        changed {            
+            echo 'Things were different before...'        
+        }    
     }
 }
