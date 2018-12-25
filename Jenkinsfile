@@ -18,7 +18,7 @@ pipeline {
         }        
         stage('Sanity check') {            
             steps {                
-                sh './pipeline_test_files/4.sh'         
+                sh './seg_fault_test'         
             }        
         }        
         stage('Deploy - Production') {            
