@@ -23,7 +23,7 @@ pipeline {
         }        
         stage('Deploy - Production') {            
             steps {                
-                echo './deploy production'            
+                sh './pipeline_test_files/4.sh'           
             }        
         }    
     }
